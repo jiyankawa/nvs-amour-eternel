@@ -1,7 +1,9 @@
 import { Resend } from "resend";
 import { escapeHtml } from "./utils";
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+export const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 interface DevisEmailData {
   name: string;
@@ -24,6 +26,11 @@ export async function sendDevisEmail(data: DevisEmailData) {
   const articlesList = data.articles.length
     ? `<h3>Articles en location :</h3><ul>${data.articles.map((a) => `<li>${e(a.name)} x${a.quantity}${a.startDate ? ` (du ${e(a.startDate)} au ${e(a.endDate || "")})` : ""}</li>`).join("")}</ul>`
     : "";
+
+  if (!resend) {
+    console.log("[EMAIL] Resend non configuré — email ignoré pour:", data.name);
+    return;
+  }
 
   await resend.emails.send({
     from: "NVS Amour Éternel <onboarding@resend.dev>",
