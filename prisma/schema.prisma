@@ -1,0 +1,128 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id       String @id @default(cuid())
+  email    String @unique
+  password String
+  name     String
+  role     String @default("ADMIN")
+}
+
+model Prestation {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  description  String
+  photos       String   @default("[]")
+  price        Float?
+  priceVisible Boolean  @default(false)
+  order        Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  contactRequests ContactRequestPrestation[]
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String    @unique
+  order    Int       @default(0)
+  articles Article[]
+}
+
+model Article {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  description  String
+  photos       String   @default("[]")
+  categoryId   String
+  price        Float?
+  priceVisible Boolean  @default(false)
+  stock        Int      @default(1)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  category        Category                @relation(fields: [categoryId], references: [id])
+  blockedDates    BlockedDate[]
+  contactRequests ContactRequestArticle[]
+
+  @@index([categoryId])
+}
+
+model BlockedDate {
+  id        String   @id @default(cuid())
+  articleId String
+  startDate DateTime
+  endDate   DateTime
+  reason    String?
+
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([articleId])
+}
+
+model ContactRequest {
+  id          String    @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  weddingDate DateTime?
+  venue       String?
+  message     String?
+  status      String    @default("NEW")
+  createdAt   DateTime  @default(now())
+
+  prestations ContactRequestPrestation[]
+  articles    ContactRequestArticle[]
+}
+
+model ContactRequestPrestation {
+  id               String @id @default(cuid())
+  contactRequestId String
+  prestationId     String
+
+  contactRequest ContactRequest @relation(fields: [contactRequestId], references: [id], onDelete: Cascade)
+  prestation     Prestation     @relation(fields: [prestationId], references: [id])
+
+  @@index([contactRequestId])
+}
+
+model ContactRequestArticle {
+  id               String    @id @default(cuid())
+  contactRequestId String
+  articleId        String
+  quantity         Int       @default(1)
+  startDate        DateTime?
+  endDate          DateTime?
+
+  contactRequest ContactRequest @relation(fields: [contactRequestId], references: [id], onDelete: Cascade)
+  article        Article        @relation(fields: [articleId], references: [id])
+
+  @@index([contactRequestId])
+}
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}

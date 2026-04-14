@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsx:*)",
+      "Bash(ls -la \"/Users/jiyankawa/Documents/Web/NVS Amour Eternel/prisma/\"*.db)",
+      "Bash(npx prisma:*)",
+      "Bash(npm run:*)",
+      "WebFetch(domain:unsplash.com)",
+      "WebSearch",
+      "Bash(npm install:*)"
+    ]
+  }
+}
