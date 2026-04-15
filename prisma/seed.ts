@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { PrismaClient } from "../src/generated/prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { createClient } from "@libsql/client";
 import bcrypt from "bcryptjs";
 import path from "path";
 import { mkdirSync } from "fs";
@@ -9,7 +10,8 @@ const dataDir = path.join(process.cwd(), "data");
 mkdirSync(dataDir, { recursive: true });
 
 const dbPath = path.join(dataDir, "nvs.db");
-const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
+const libsql = createClient({ url: `file:${dbPath}` });
+const adapter = new PrismaLibSql(libsql);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
