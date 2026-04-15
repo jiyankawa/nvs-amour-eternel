@@ -1,7 +1,6 @@
 import "dotenv/config";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
-import { createClient } from "@libsql/client";
 import bcrypt from "bcryptjs";
 import path from "path";
 import { mkdirSync } from "fs";
@@ -10,8 +9,7 @@ const dataDir = path.join(process.cwd(), "data");
 mkdirSync(dataDir, { recursive: true });
 
 const dbPath = path.join(dataDir, "nvs.db");
-const libsql = createClient({ url: `file:${dbPath}` });
-const adapter = new PrismaLibSql(libsql);
+const adapter = new PrismaLibSql({ url: `file:${dbPath}` });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
