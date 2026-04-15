@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  basePath: "/dev",
   experimental: {
     workerThreads: false,
     cpus: 1,
