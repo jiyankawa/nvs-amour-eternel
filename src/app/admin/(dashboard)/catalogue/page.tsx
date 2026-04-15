@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, Loader2, Eye, EyeOff, Calendar, FolderPlus } from "lucide-react";
+import Image from "next/image";
+import { Plus, Pencil, Trash2, Loader2, Eye, EyeOff, Calendar, FolderPlus, Upload, X } from "lucide-react";
 
 interface Category {
   id: string;
@@ -33,6 +34,9 @@ export default function AdminCataloguePage() {
   const [showCatForm, setShowCatForm] = useState(false);
   const [editing, setEditing] = useState<Article | null>(null);
   const [catName, setCatName] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState("");
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -59,12 +63,14 @@ export default function AdminCataloguePage() {
 
   const resetForm = () => {
     setForm({ name: "", description: "", categoryId: "", price: "", priceVisible: false, stock: 1, active: true });
+    setPhotos([]);
     setEditing(null);
     setShowForm(false);
   };
 
   const handleEdit = (a: Article) => {
     setEditing(a);
+    setPhotos((() => { try { return JSON.parse(a.photos); } catch { return []; } })());
     setForm({
       name: a.name,
       description: a.description,
@@ -75,6 +81,28 @@ export default function AdminCataloguePage() {
       active: a.active,
     });
     setShowForm(true);
+  };
+
+  const handleUploadPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "nvs-amour-eternel/articles");
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.url) setPhotos((prev) => [...prev, data.url]);
+    } catch (err) {
+      console.error("Upload failed:", err);
+    }
+    setUploading(false);
+    e.target.value = "";
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -88,7 +116,7 @@ export default function AdminCataloguePage() {
       priceVisible: form.priceVisible,
       stock: form.stock,
       active: form.active,
-      photos: editing ? (() => { try { return JSON.parse(editing.photos); } catch { return []; } })() : [],
+      photos,
     };
 
     await fetch("/api/articles", {
@@ -231,6 +259,72 @@ export default function AdminCataloguePage() {
                   className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gold resize-none"
                 />
               </div>
+              {/* Photos */}
+              <div>
+                <label className="block text-sm font-medium text-dark mb-2">Photos</label>
+                {photos.length > 0 && (
+                  <div className="grid grid-cols-4 gap-2 mb-3">
+                    {photos.map((url, i) => (
+                      <div key={i} className="relative group">
+                        <Image
+                          src={url}
+                          alt={`Photo ${i + 1}`}
+                          width={120}
+                          height={120}
+                          className="w-full h-24 object-cover border border-gray-200"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removePhoto(i)}
+                          className="absolute top-1 right-1 bg-red-500 text-white p-0.5 opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <label className="flex items-center gap-2 px-4 py-3 border border-dashed border-gray-300 cursor-pointer hover:border-gold transition-colors mb-2">
+                  {uploading ? (
+                    <Loader2 size={18} className="animate-spin text-gold" />
+                  ) : (
+                    <Upload size={18} className="text-gray" />
+                  )}
+                  <span className="text-sm text-gray">
+                    {uploading ? "Upload en cours..." : "Uploader une photo"}
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleUploadPhoto}
+                    className="hidden"
+                    disabled={uploading}
+                  />
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    value={photoUrl}
+                    onChange={(e) => setPhotoUrl(e.target.value)}
+                    placeholder="Ou coller une URL d'image..."
+                    className="flex-1 border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gold"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (photoUrl.trim()) {
+                        setPhotos((prev) => [...prev, photoUrl.trim()]);
+                        setPhotoUrl("");
+                      }
+                    }}
+                    disabled={!photoUrl.trim()}
+                    className="bg-gold hover:bg-gold-dark disabled:opacity-30 text-white px-4 py-2 text-sm font-medium transition-colors"
+                  >
+                    Ajouter
+                  </button>
+                </div>
+              </div>
+
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-dark mb-1">Prix</label>

@@ -15,32 +15,28 @@ export const metadata: Metadata = {
 
 const defaultPrestations = [
   {
-    name: "Recherche Prestataires",
+    name: "Organisation Totale",
     description:
-      "Nous recherchons et sélectionnons pour vous les meilleurs prestataires : traiteur, photographe, DJ, fleuriste... Nous négocions les tarifs et coordonnons les rendez-vous pour vous faire gagner du temps et de la sérénité.",
+      "En nous confiant votre événement, vous vous assurez une gestion incomparable et vous garantir une expérience inoubliable maîtrisée de bout en bout grâce à notre savoir-faire.\n\n• Étude approfondie de votre projet\n• Création d'un cahier des charges\n• Élaboration et suivi de votre budget\n• Conseils, accompagnement, rendez-vous réguliers\n• Recherche et sélection de l'ensemble des prestataires\n• Proposition d'hébergement pour vos invités\n• Conception scénographie\n• Centralisation des animations surprises\n• Planning jour J de votre mariage",
     image:
       "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=800&q=80",
-  },
-  {
-    name: "Organisation",
-    description:
-      "De la définition de votre budget à la gestion du rétroplanning, nous prenons en charge l'intégralité de l'organisation de votre mariage. Planning, logistique, gestion des invités — nous pensons à tout.",
-    image:
-      "https://images.unsplash.com/photo-1546032996-6dfacbacbf3f?w=800&q=80",
-  },
-  {
-    name: "Décoration du Lieu",
-    description:
-      "Nous concevons et réalisons la décoration de votre lieu de réception et de cérémonie. Un univers unique, créé sur-mesure selon vos envies : centres de table, arches florales, mise en lumière, scénographie complète.",
-    image:
-      "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=800&q=80",
+    price: 1800,
+    priceVisible: true,
+    priceLabel: "À partir de",
   },
   {
     name: "Coordination du Jour J",
     description:
-      "Le jour de votre mariage, nous sommes sur place pour coordonner tous les prestataires, gérer les imprévus et veiller au bon déroulement de chaque instant. Vous n'avez qu'à profiter.",
+      "Le jour de votre mariage, nous prenons en charge les aléas, la logistique des prestataires, l'accueil des invités et le bon déroulé de la journée.\n\nGrâce à cette prestation, vous pourrez savourer votre journée en toute sérénité, entouré de vos proches et surtout de votre moitié !\n\n• Rétroplanning\n• Établissement du planning du Jour J\n• Présence et coordination le Jour J\n• Synchronisation des prestataires et accueil des invités",
     image:
       "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
+  },
+  {
+    name: "Décoration Sur Mesure",
+    description:
+      "Notre agence NVS Amour Éternel dispose d'une équipe wedding designer spécialisée en décoration sur mesure.\n\nPour créer une véritable identité visuelle à votre mariage, nous vous accompagnons pour définir à vos côtés le style, le thème, les matières, la couleur, les compositions florales et bien plus !\n\nGrâce à son savoir-faire, NVS Amour Éternel vous propose un service complet.",
+    image:
+      "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=800&q=80",
   },
   {
     name: "Location de Matériel",
@@ -116,7 +112,7 @@ export default async function PrestationsPage() {
                 <h2 className="font-[family-name:var(--font-heading)] text-3xl text-dark mb-6">
                   {presta.name}
                 </h2>
-                <p className="text-gray leading-relaxed mb-6">
+                <p className="text-gray leading-relaxed mb-6 whitespace-pre-line">
                   {presta.description}
                 </p>
                 {"price" in presta &&

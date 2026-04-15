@@ -7,7 +7,18 @@
       "Bash(npm run:*)",
       "WebFetch(domain:unsplash.com)",
       "WebSearch",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "WebFetch(domain:www.o2switch.fr)",
+      "Bash(lsof -ti:3000)",
+      "Bash(xargs kill:*)",
+      "Bash(pkill -f ngrok)",
+      "Bash(npm start:*)",
+      "Bash(ngrok http:*)",
+      "Bash(curl -s http://127.0.0.1:4040/api/tunnels)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['tunnels'][0]['public_url']\\)\")",
+      "Bash(ssh -o:*)",
+      "Bash(sshpass -p '8BSA-RRu3-4Ty!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 yuho8570@phoque.o2switch.net \"echo 'SSH OK' && node -v && pwd\")",
+      "Bash(brew install:*)"
     ]
   }
 }

@@ -8,7 +8,6 @@ export default defineConfig({
     seed: "npx tsx prisma/seed.ts",
   },
   datasource: {
-    // For migrations CLI only — runtime uses driver adapters
-    url: process.env["DATABASE_URL"] || "file:./dev.db",
+    url: "file:./data/nvs.db",
   },
 });

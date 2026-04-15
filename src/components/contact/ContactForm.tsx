@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Send, Plus, Minus, Loader2, CheckCircle, ChevronDown } from "lucide-react";
+import { Send, Plus, Minus, Loader2, CheckCircle } from "lucide-react";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 
 interface Prestation {
@@ -42,7 +42,6 @@ export default function ContactForm({
   });
   const [selectedPrestations, setSelectedPrestations] = useState<string[]>([]);
   const [selectedArticles, setSelectedArticles] = useState<ArticleSelection[]>([]);
-  const [openCategories, setOpenCategories] = useState<string[]>([]);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const turnstileRef = useRef<TurnstileInstance>(null);
@@ -50,14 +49,6 @@ export default function ContactForm({
   const togglePrestation = (id: string) => {
     setSelectedPrestations((prev) =>
       prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
-    );
-  };
-
-  const toggleCategory = (catName: string) => {
-    setOpenCategories((prev) =>
-      prev.includes(catName)
-        ? prev.filter((c) => c !== catName)
-        : [...prev, catName]
     );
   };
 
@@ -308,18 +299,15 @@ export default function ContactForm({
 
           <div className="space-y-2">
             {Object.entries(articlesByCategory).map(([catName, catArticles]) => {
-              const isOpen = openCategories.includes(catName);
               const selectedInCat = catArticles.filter(
                 (a) => getArticleQty(a.id) > 0
               ).length;
 
               return (
-                <div key={catName} className="border border-gray-light">
-                  {/* Category header — collapsible */}
-                  <button
-                    type="button"
-                    onClick={() => toggleCategory(catName)}
-                    className="w-full flex items-center justify-between p-4 hover:bg-cream/50 transition-colors"
+                <details key={catName} className="border border-gray-light group">
+                  <summary
+                    className="flex items-center justify-between p-4 cursor-pointer select-none list-none"
+                    style={{ WebkitTapHighlightColor: "transparent" }}
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-semibold text-dark">
@@ -331,66 +319,54 @@ export default function ContactForm({
                         </span>
                       )}
                     </div>
-                    <ChevronDown
-                      size={18}
-                      className={`text-gray transition-transform ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
+                    <svg
+                      width="18" height="18" viewBox="0 0 24 24"
+                      fill="none" stroke="#6B7280" strokeWidth="2" strokeLinecap="round"
+                      className="transition-transform group-open:rotate-180"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </summary>
 
-                  {/* Category articles */}
-                  {isOpen && (
-                    <div className="border-t border-gray-light divide-y divide-gray-light">
-                      {catArticles.map((article) => {
-                        const qty = getArticleQty(article.id);
-
-                        return (
-                          <div
-                            key={article.id}
-                            className={`flex items-center justify-between px-4 py-3 transition-colors ${
-                              qty > 0 ? "bg-rose/50" : ""
-                            }`}
-                          >
-                            <span
-                              className={`text-sm flex-1 ${
-                                qty > 0 ? "font-medium text-dark" : "text-gray"
-                              }`}
+                  <div className="border-t border-gray-light divide-y divide-gray-light">
+                    {catArticles.map((article) => {
+                      const qty = getArticleQty(article.id);
+                      return (
+                        <div
+                          key={article.id}
+                          className={`flex items-center justify-between px-4 py-3 ${
+                            qty > 0 ? "bg-rose/50" : ""
+                          }`}
+                        >
+                          <span className={`text-sm flex-1 pr-3 ${qty > 0 ? "font-medium text-dark" : "text-gray"}`}>
+                            {article.name}
+                          </span>
+                          <div className="flex items-center border border-gray-light bg-white">
+                            <button
+                              type="button"
+                              onClick={() => setArticleQty(article.id, qty - 1, article.stock)}
+                              disabled={qty === 0}
+                              className="w-10 h-10 flex items-center justify-center hover:bg-cream disabled:opacity-30"
                             >
-                              {article.name}
+                              <Minus size={16} />
+                            </button>
+                            <span className="w-10 text-center text-sm font-medium">
+                              {qty}
                             </span>
-
-                            <div className="flex items-center border border-gray-light bg-white">
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  setArticleQty(article.id, qty - 1, article.stock)
-                                }
-                                className="p-1.5 hover:bg-cream disabled:opacity-30"
-                                disabled={qty === 0}
-                              >
-                                <Minus size={14} />
-                              </button>
-                              <span className="px-3 text-sm min-w-[2rem] text-center font-medium">
-                                {qty}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  setArticleQty(article.id, qty + 1, article.stock)
-                                }
-                                className="p-1.5 hover:bg-cream disabled:opacity-30"
-                                disabled={qty >= article.stock}
-                              >
-                                <Plus size={14} />
-                              </button>
-                            </div>
+                            <button
+                              type="button"
+                              onClick={() => setArticleQty(article.id, qty + 1, article.stock)}
+                              disabled={qty >= article.stock}
+                              className="w-10 h-10 flex items-center justify-center hover:bg-cream disabled:opacity-30"
+                            >
+                              <Plus size={16} />
+                            </button>
                           </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </details>
               );
             })}
           </div>

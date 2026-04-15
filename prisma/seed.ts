@@ -1,24 +1,16 @@
 import "dotenv/config";
 import { PrismaClient } from "../src/generated/prisma/client";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import bcrypt from "bcryptjs";
+import path from "path";
+import { mkdirSync } from "fs";
 
-function createClient() {
-  if (process.env.TURSO_DATABASE_URL) {
-    const { PrismaLibSql } = require("@prisma/adapter-libsql");
-    const adapter = new PrismaLibSql({
-      url: process.env.TURSO_DATABASE_URL,
-      authToken: process.env.TURSO_AUTH_TOKEN,
-    });
-    return new PrismaClient({ adapter });
-  } else {
-    const { PrismaBetterSqlite3 } = require("@prisma/adapter-better-sqlite3");
-    const path = require("path");
-    const dbPath = path.join(process.cwd(), "dev.db");
-    return new PrismaClient({ adapter: new PrismaBetterSqlite3({ url: `file:${dbPath}` }) });
-  }
-}
+const dataDir = path.join(process.cwd(), "data");
+mkdirSync(dataDir, { recursive: true });
 
-const prisma = createClient();
+const dbPath = path.join(dataDir, "nvs.db");
+const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   // Create admin user

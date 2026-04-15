@@ -57,7 +57,7 @@ export default async function ContactPage() {
                     <div>
                       <p className="font-medium text-dark">Email</p>
                       <p className="text-gray text-sm">
-                        contact@nvsamoureternel.fr
+                        contact.nvsamoureternel@gmail.com
                       </p>
                     </div>
                   </div>
@@ -65,7 +65,7 @@ export default async function ContactPage() {
                     <Phone size={20} className="text-gold mt-1 flex-shrink-0" />
                     <div>
                       <p className="font-medium text-dark">Téléphone</p>
-                      <p className="text-gray text-sm">06 XX XX XX XX</p>
+                      <p className="text-gray text-sm">06 71 34 73 72</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -73,7 +73,7 @@ export default async function ContactPage() {
                     <div>
                       <p className="font-medium text-dark">Zone d&apos;intervention</p>
                       <p className="text-gray text-sm">
-                        Île-de-France, France
+                        Île-de-France &amp; Haute-Normandie
                       </p>
                     </div>
                   </div>

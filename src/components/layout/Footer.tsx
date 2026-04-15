@@ -12,8 +12,8 @@ export default function Footer() {
               NVS <span className="text-gold">Amour Éternel</span>
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Votre partenaire pour un mariage d&apos;exception en Île-de-France.
-              Organisation, décoration et location de matériel.
+              Votre wedding planner d&apos;exception en Île-de-France et Haute-Normandie.
+              Mariages haut de gamme, organisation, décoration et location de matériel.
             </p>
           </div>
 
@@ -59,15 +59,15 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-gray-400 text-sm">
                 <Mail size={16} className="text-gold flex-shrink-0" />
-                contact@nvsamoureternel.fr
+                contact.nvsamoureternel@gmail.com
               </li>
               <li className="flex items-center gap-3 text-gray-400 text-sm">
                 <Phone size={16} className="text-gold flex-shrink-0" />
-                06 XX XX XX XX
+                06 71 34 73 72
               </li>
               <li className="flex items-center gap-3 text-gray-400 text-sm">
                 <MapPin size={16} className="text-gold flex-shrink-0" />
-                Île-de-France, France
+                Île-de-France &amp; Haute-Normandie
               </li>
             </ul>
           </div>

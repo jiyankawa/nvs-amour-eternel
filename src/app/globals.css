@@ -26,6 +26,12 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
+/* iOS Safari fix — tous les éléments interactifs */
+button, a, label, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 /* Animations */
 @keyframes fadeInUp {
   from {

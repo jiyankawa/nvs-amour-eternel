@@ -56,7 +56,7 @@ export default async function HomePage() {
             NVS Amour Éternel
           </h1>
           <p className="text-lg md:text-xl lg:text-2xl mb-8 animate-fade-in-up-delay font-light">
-            Créons ensemble le mariage de vos rêves en Île-de-France
+            Mariages haut de gamme en Île-de-France et Haute-Normandie
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up-delay">
             <Link
@@ -84,21 +84,22 @@ export default async function HomePage() {
                 Votre mariage, <span className="text-gold">notre passion</span>
               </h2>
               <p className="text-gray leading-relaxed mb-6">
-                Chez NVS Amour Éternel, nous mettons tout notre savoir-faire au
-                service de votre plus beau jour. De l&apos;organisation à la
-                décoration, en passant par la location de matériel, nous vous
-                accompagnons à chaque étape.
+                Basée en Île-de-France et en Haute-Normandie, notre agence NVS
+                Amour Éternel est spécialisée dans les mariages haut de gamme.
+                Émilie, wedding planner diplômée, vous accompagne avec
+                bienveillance et complicité tout au long de votre mariage.
               </p>
               <p className="text-gray leading-relaxed mb-8">
-                Basées en Île-de-France, nous créons des mariages sur-mesure qui
-                reflètent votre histoire et vos envies. Chaque détail compte, et
-                nous sommes là pour les rendre parfaits.
+                De la préparation à la cérémonie, sélection du lieu d&apos;exception,
+                des traiteurs étoilés et autres prestataires certifiés sauront
+                répondre à vos attentes. Notre agence vous garantit une
+                organisation sans faille.
               </p>
               <Link
-                href="/prestations"
+                href="/a-propos"
                 className="inline-flex items-center gap-2 text-gold hover:text-gold-dark font-medium transition-colors"
               >
-                Découvrir nos prestations
+                Découvrir notre histoire
                 <ArrowRight size={18} />
               </Link>
             </div>
@@ -169,6 +170,50 @@ export default async function HomePage() {
                 <ArrowRight size={18} />
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery Preview */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="font-[family-name:var(--font-heading)] text-3xl md:text-4xl text-dark mb-4">
+              Nos <span className="text-gold">Réalisations</span>
+            </h2>
+            <p className="text-gray max-w-2xl mx-auto">
+              Découvrez en images nos plus belles créations
+            </p>
+          </div>
+          <div className="grid grid-cols-4 gap-3 md:gap-4">
+            {[
+              { src: "photo-1519741497674-611481863552", alt: "Cérémonie" },
+              { src: "photo-1511795409834-ef04bbd61622", alt: "Décoration florale" },
+              { src: "photo-1465495976277-4387d4b0b4c6", alt: "Couple" },
+              { src: "photo-1519225421980-715cb0215aed", alt: "Décoration" },
+              { src: "photo-1522673607200-164d1b6ce486", alt: "Alliances" },
+              { src: "photo-1520854221256-17451cc331bf", alt: "Préparatifs" },
+              { src: "photo-1525772764200-be829a350797", alt: "Réception" },
+              { src: "photo-1529636798458-92182e662485", alt: "Arche florale" },
+            ].map((photo, i) => (
+              <div key={i} className="relative aspect-square overflow-hidden group">
+                <Image
+                  src={`https://images.unsplash.com/${photo.src}?w=400&q=80`}
+                  alt={photo.alt}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link
+              href="/galerie"
+              className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white px-8 py-3 text-sm font-medium tracking-widest uppercase transition-colors"
+            >
+              Accéder à la galerie
+              <ArrowRight size={18} />
+            </Link>
           </div>
         </div>
       </section>

@@ -18,8 +18,10 @@ export default function MentionsLegalesPage() {
               Éditeur du site
             </h2>
             <p>NVS Amour Éternel</p>
-            <p>Île-de-France, France</p>
-            <p>Email : contact@nvsamoureternel.fr</p>
+            <p>Mme Wailly Émilie</p>
+            <p>15 résidence le petit coq, 95770 Saint-Clair-sur-Epte</p>
+            <p>Tél. : 06 71 34 73 72</p>
+            <p>Email : contact.nvsamoureternel@gmail.com</p>
           </div>
 
           <div>

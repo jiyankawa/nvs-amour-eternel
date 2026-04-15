@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { uploadImage } from "@/lib/cloudinary";
+import { writeFile, mkdir } from "fs/promises";
+import path from "path";
+import crypto from "crypto";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
+
+const EXT_MAP: Record<string, string> = {
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+  "image/gif": ".gif",
+};
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -14,7 +24,7 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    const folder = (formData.get("folder") as string) || "nvs-amour-eternel";
+    const folder = (formData.get("folder") as string) || "general";
 
     if (!file) {
       return NextResponse.json({ error: "Fichier requis" }, { status: 400 });
@@ -34,7 +44,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const url = await uploadImage(file, folder);
+    // Create upload directory
+    const uploadPath = path.join(UPLOAD_DIR, folder);
+    await mkdir(uploadPath, { recursive: true });
+
+    // Generate unique filename
+    const ext = EXT_MAP[file.type] || ".jpg";
+    const uniqueName = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}${ext}`;
+    const filePath = path.join(uploadPath, uniqueName);
+
+    // Write file to disk
+    const bytes = await file.arrayBuffer();
+    await writeFile(filePath, Buffer.from(bytes));
+
+    // Return public URL
+    const url = `/uploads/${folder}/${uniqueName}`;
     return NextResponse.json({ url });
   } catch (error) {
     console.error("Upload error:", error);

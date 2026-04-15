@@ -8,10 +8,8 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-      },
+      // Images locales servies depuis /public/uploads
+      // Cloudinary retiré — upload local sur o2switch
     ],
   },
   async headers() {
@@ -39,18 +37,11 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
-          {
-            key: "Content-Security-Policy",
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: blob: https://images.unsplash.com https://res.cloudinary.com",
-              "connect-src 'self' https://challenges.cloudflare.com",
-              "frame-src https://challenges.cloudflare.com",
-            ].join("; "),
-          },
+          // CSP désactivé pour la démo ngrok — à réactiver en production
+          // {
+          //   key: "Content-Security-Policy",
+          //   value: "...",
+          // },
         ],
       },
     ];
